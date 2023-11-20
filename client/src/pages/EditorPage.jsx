@@ -11,6 +11,7 @@ import { func } from "prop-types";
 export const EditorPage = () => {
 
   const socketRef = useRef(null);
+  const codeRef = useRef(null);
   const location = useLocation();
   const reactNavigator = useNavigate();
   const { roomId } = useParams();
@@ -33,7 +34,7 @@ export const EditorPage = () => {
       //connection with the port 4000
       socketRef.current.emit(ACTIONS.JOIN, {
         roomId,
-        username: location.state?.username
+        username: location.state?.username,
       });
 
       //joined users event
@@ -45,6 +46,12 @@ export const EditorPage = () => {
           }
 
           setClients(clients);
+          //code async
+          socketRef.current.emit(ACTIONS.SYNC_CODE, {
+            code: codeRef.current,
+            socketId,
+          })
+          
         });
 
       //listen disconected users from room
@@ -114,7 +121,7 @@ export const EditorPage = () => {
         <Editor
           socketRef={socketRef}
           roomId={roomId}
-          // onCodeChange={(code) => { codeRef.current = code }}
+          onCodeChange={(code) => { codeRef.current = code }}
         />
       </div>
     </div>

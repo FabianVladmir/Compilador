@@ -51,6 +51,10 @@ io.on("connection", (socket) => {
         socket.in(roomId).emit(ACTIONS.CODE_CHANGE, { code });
     });
 
+    //code async
+    socket.on(ACTIONS.SYNC_CODE, ({socketId, code}) => {
+        io.to(socketId).emit(ACTIONS.CODE_CHANGE, { code });
+    });
 
 
     // disconnecting from socket

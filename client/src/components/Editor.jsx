@@ -29,8 +29,8 @@ export const Editor = ({ socketRef, roomId, onCodeChange }) => {
       const handleCodeChange = (instance, changes) => {
         const { origin } = changes; //cut, paste, input, ...
         const code = instance.getValue();
-
-        // onCodeChange(code);
+        // Sync code for future users
+        onCodeChange(code);
 
         // Emit the code change to other clients in the same room
         if (origin !== 'setValue' && socketRef.current) {
