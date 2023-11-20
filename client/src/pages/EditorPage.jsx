@@ -5,6 +5,7 @@ import initSocket from "../../socket";
 import ACTIONS from "../Actions";
 import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
+import { func } from "prop-types";
 
 
 export const EditorPage = () => {
@@ -55,8 +56,6 @@ export const EditorPage = () => {
           });
         }
       });
-
-
     }
 
     init();
@@ -70,10 +69,22 @@ export const EditorPage = () => {
 
   }, []);
 
+   async function copyRoomId(){
+    try {
+      await navigator.clipboard.writeText(roomId);
+      toast.success('Room ID copiado');
+    } catch (error) {
+      toast.error('No se puede copiar el Room ID');
+      console.log(error);
+    }
+  }
 
+  function leaveRoom(){
+    reactNavigator('/');
+  }
 
   if (!location.state) {
-    return <Navigate to="/" />
+    return <Navigate to="/" />;
   }
 
   return (
@@ -95,8 +106,8 @@ export const EditorPage = () => {
           </div>
         </div>
 
-        <button className="btn copyBtn" >Copear ROOM ID</button>
-        <button className="btn leaveBtn" >Salir</button>
+        <button className="btn copyBtn" onClick={copyRoomId}>Copear ROOM ID</button>
+        <button className="btn leaveBtn" onClick={leaveRoom}>Salir</button>
       </div>
 
       <div className="editorWrap">
