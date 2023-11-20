@@ -65,13 +65,10 @@ io.on("connection", (socket) => {
         delete userSocketMap[socket.id];
         socket.leave();
     });
-
-
-
-
-
 });
 
+
+//some
 
 server.listen(PORT, () => {
     console.log(`Escuchando en el puerto ${PORT}`)
