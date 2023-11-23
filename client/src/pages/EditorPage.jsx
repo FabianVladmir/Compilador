@@ -1,15 +1,18 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react";
 import { Client } from "../components/Client";
 import { Editor } from "../components/Editor";
 import initSocket from "../../socket";
 import ACTIONS from "../Actions";
-import { Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  Navigate,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import toast from "react-hot-toast";
 import { func } from "prop-types";
 
-
 export const EditorPage = () => {
-
   const socketRef = useRef(null);
   const codeRef = useRef(null);
   const location = useLocation();
@@ -18,17 +21,21 @@ export const EditorPage = () => {
   // console.log(roomId)
   const [clients, setClients] = useState([]);
 
+  // Mandar datos a servidor par acompilar python
+  const [codigo, setCodigo] = useState("hola");
+  const mandarCodigo = () => {
+    console.log(codigo);
+  };
   useEffect(() => {
     const init = async () => {
-
       socketRef.current = await initSocket();
-      socketRef.current.on('connect_error', (err) => handleErrors(err));
-      socketRef.current.on('connect_failed', (err) => handleErrors(err));
+      socketRef.current.on("connect_error", (err) => handleErrors(err));
+      socketRef.current.on("connect_failed", (err) => handleErrors(err));
 
       function handleErrors(e) {
-        console.log('socket error', e);
-        toast.error('Socket connection failed, try again later.');
-        reactNavigator('/');
+        console.log("socket error", e);
+        toast.error("Socket connection failed, try again later.");
+        reactNavigator("/");
       }
 
       //connection with the port 4000
@@ -38,7 +45,8 @@ export const EditorPage = () => {
       });
 
       //joined users event
-      socketRef.current.on(ACTIONS.JOINED,
+      socketRef.current.on(
+        ACTIONS.JOINED,
         ({ clients, username, socketId }) => {
           if (username !== location.state?.username) {
             toast.success(`${username} unio a la sala`);
@@ -50,20 +58,20 @@ export const EditorPage = () => {
           socketRef.current.emit(ACTIONS.SYNC_CODE, {
             code: codeRef.current,
             socketId,
-          })
-          
-        });
+          });
+        }
+      );
 
       //listen disconected users from room
       socketRef.current.on(ACTIONS.DISCONNECTED, ({ socketId, username }) => {
         if (username) {
           toast.success(`${username} dejo la sala`);
           setClients((prevClients) => {
-            return prevClients.filter(client => client.socketId !== socketId);
+            return prevClients.filter((client) => client.socketId !== socketId);
           });
         }
       });
-    }
+    };
 
     init();
     return () => {
@@ -72,22 +80,41 @@ export const EditorPage = () => {
         socketRef.current.off(ACTIONS.JOINED);
         socketRef.current.off(ACTIONS.DISCONNECTED);
       }
-    }
-
+    };
   }, []);
-
-   async function copyRoomId(){
+  const postCode = async () => {
+    const settings = {
+      method: "POST",
+      body:JSON.stringify({src_code: codigo}),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      const fetchResponse = await fetch(
+        `http://localhost:8080/submit_code`,
+        settings
+      );
+      const data = await fetchResponse.json();
+      console.log(data.outputS)
+      // return data;
+    } catch (e) {
+      return e;
+    }
+  };
+  async function copyRoomId() {
     try {
       await navigator.clipboard.writeText(roomId);
-      toast.success('Room ID copiado');
+      toast.success("Room ID copiado");
     } catch (error) {
-      toast.error('No se puede copiar el Room ID');
+      toast.error("No se puede copiar el Room ID");
       console.log(error);
     }
   }
 
-  function leaveRoom(){
-    reactNavigator('/');
+  function leaveRoom() {
+    reactNavigator("/");
   }
 
   if (!location.state) {
@@ -99,31 +126,58 @@ export const EditorPage = () => {
       <div className="aside">
         <div className="asideInner">
           <div className="logo">
-            <img className="homePageLogo" src="/logo-escuela.png" alt="logo-escuela" />
+            <img
+              className="homePageLogo"
+              src="/logo-escuela.png"
+              alt="logo-escuela"
+            />
           </div>
 
           <h3>Conectados</h3>
 
           <div className="clientsList">
-            {
-              clients.map((client) => (
-                <Client key={client.socketId} username={client.username} />
-              ))
-            }
+            {clients.map((client) => (
+              <Client key={client.socketId} username={client.username} />
+            ))}
           </div>
         </div>
 
-        <button className="btn copyBtn" onClick={copyRoomId}>Copear ROOM ID</button>
-        <button className="btn leaveBtn" onClick={leaveRoom}>Salir</button>
+        <button className="btn copyBtn" onClick={copyRoomId}>
+          Copear ROOM ID
+        </button>
+        <button className="btn leaveBtn" onClick={leaveRoom}>
+          Salir
+        </button>
       </div>
 
       <div className="editorWrap">
         <Editor
           socketRef={socketRef}
           roomId={roomId}
-          onCodeChange={(code) => { codeRef.current = code }}
+          onCodeChange={(code) => {
+            codeRef.current = code;
+            setCodigo(code);
+          }}
+          setCodigo={setCodigo}
         />
       </div>
+      <button
+        onClick={() => {
+          postCode();
+        }}
+        className="buttonCompiler"
+        style={{
+          background: "#57FA7D",
+          width: "200px",
+          height: "50px",
+          borderRadius: "10px",
+          position: "fixed",
+          bottom: "20px",
+          right: "30px",
+        }}
+      >
+        Compilar
+      </button>
     </div>
-  )
-}
+  );
+};

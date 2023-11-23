@@ -7,7 +7,7 @@ import 'codemirror/addon/edit/closetag';
 import 'codemirror/addon/edit/closebrackets';
 import ACTIONS from "../Actions";
 
-export const Editor = ({ socketRef, roomId, onCodeChange }) => {
+export const Editor = ({ socketRef, roomId, onCodeChange}) => {
 
   const editorRef = useRef(null);
 
