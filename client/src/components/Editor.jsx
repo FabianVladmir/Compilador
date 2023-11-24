@@ -25,7 +25,7 @@ export const Editor = ({ socketRef, roomId, onCodeChange }) => {
 
       editorRef.current = Codemirror.fromTextArea(textArea, extensions);
 
-      //Code local and emith other clients
+      //Code local and emit other clients
       const handleCodeChange = (instance, changes) => {
         const { origin } = changes; //cut, paste, input, ...
         const code = instance.getValue();

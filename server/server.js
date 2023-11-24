@@ -22,7 +22,6 @@ function getAllConnectedUsers(roomId) {
         });
 }
 
-
 io.on("connection", (socket) => {
     console.log("connected", socket.id);
 
@@ -46,12 +45,12 @@ io.on("connection", (socket) => {
         }
     });
 
-    //code change
+    //code change sync
     socket.on(ACTIONS.CODE_CHANGE, ({roomId, code}) => {
         socket.in(roomId).emit(ACTIONS.CODE_CHANGE, { code });
     });
 
-    //code async
+    //code change async
     socket.on(ACTIONS.SYNC_CODE, ({socketId, code}) => {
         io.to(socketId).emit(ACTIONS.CODE_CHANGE, { code });
     });
