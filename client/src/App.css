@@ -66,7 +66,17 @@ footer a {
   margin-left: auto;
 }
 
+.compilerBtn{
+  background: #2431e7;
+  margin-left: auto;
+}
+
+.compilerBtn:hover{
+  background: #060e79;
+}
+
 .joinBtn:hover,
+.buttonCompiler:hover,
 .leaveBtn:hover {
   background: #2b824c;
 }
@@ -91,7 +101,7 @@ footer a:hover {
 
 .mainWrap {
   display: grid;
-  grid-template-columns: 230px 1fr;
+  grid-template-columns: 230px 1fr auto;
 }
 
 .aside {
@@ -104,6 +114,26 @@ footer a:hover {
 .asideInner {
   flex: 1;
 }
+
+.outputEditor {
+  /* height: 50vh; */
+  display: flex;
+  position: relative;
+  width: 50vh;  
+}
+
+.outputConsole {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  height: 50%;
+  background-color: #ededf5;
+  border-style: ridge;
+  border-radius: 10px;
+}
+
 
 .clientsList {
   display: flex;
@@ -135,6 +165,11 @@ footer a:hover {
   width: 100%;
   margin-top: 20px;
 }
+
+.compilerBtn{
+  width: 100%;
+  margin-bottom: 20px;
+}
 .CodeMirror {
   min-height: calc(100vh - 20px);
   font-size: 20px;
@@ -142,12 +177,3 @@ footer a:hover {
   padding-top: 20px;
 }
 
-.buttonCompiler{
-  background: "red"; 
-  /* width:"200px";
-  height:"50px"; 
-  border-radius:"10px"; 
-  position:"fixed"; 
-  bottom:"20px";
-  right:"30px" */
-}

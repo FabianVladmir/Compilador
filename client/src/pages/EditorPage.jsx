@@ -145,6 +145,8 @@ export const EditorPage = () => {
           </div>
         </div>
 
+        <button className="btn compilerBtn" onClick={postCode}> Compilar</button>
+
         <button className="btn copyBtn" onClick={copyRoomId}>
           Copear ROOM ID
         </button>
@@ -152,6 +154,7 @@ export const EditorPage = () => {
           Salir
         </button>
       </div>
+      
 
       <div className="editorWrap">
         <Editor
@@ -164,23 +167,12 @@ export const EditorPage = () => {
           setCodigo={setCodigo}
         />
       </div>
-      <button
-        onClick={() => {
-          postCode();
-        }}
-        className="buttonCompiler"
-        style={{
-          background: "#57FA7D",
-          width: "200px",
-          height: "50px",
-          borderRadius: "10px",
-          position: "fixed",
-          bottom: "20px",
-          right: "30px",
-        }}
-      >
-        Compilar
-      </button>
+      
+
+      <div className="outputEditor">
+          <div className="outputConsole"></div>
+      </div>
+      
     </div>
   );
 };
