@@ -100,7 +100,7 @@ export const EditorPage = () => {
         settings
       );
       const data = await fetchResponse.json();
-      console.log(data.outputS)
+      console.log(data.output);
       // return data;
     } catch (e) {
       return e;

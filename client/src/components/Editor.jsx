@@ -16,7 +16,7 @@ export const Editor = ({ socketRef, roomId, onCodeChange}) => {
 
       const textArea = document.getElementById('realTimeEditor');
       const extensions = {
-        mode: 'javascript',
+        mode: 'python',
         theme: 'dracula',
         autoCloseTags: true,
         autoCloseBrackets: true,
