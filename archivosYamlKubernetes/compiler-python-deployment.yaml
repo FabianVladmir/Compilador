@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: compiler-python
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: compiler-python
+  template:
+    metadata:
+      labels:
+        app: compiler-python
+    spec:
+      containers:
+      - name: replit-clone
+        image: angelusszv2/compiladorpython
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "200m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
