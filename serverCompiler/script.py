@@ -1,5 +1,1 @@
-def some():
-  print("pepepe")
-
-
-some()
+print("vas a caer dibujito")

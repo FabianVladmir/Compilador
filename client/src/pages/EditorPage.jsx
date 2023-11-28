@@ -23,6 +23,9 @@ export const EditorPage = () => {
 
   // Mandar datos a servidor par acompilar python
   const [codigo, setCodigo] = useState("hola");
+  const [outputcode, setOutputcode] = useState("");
+  const [isCodeCompiled, setIsCodeCompiled] = useState(false); 
+
   const mandarCodigo = () => {
     console.log(codigo);
   };
@@ -84,7 +87,7 @@ export const EditorPage = () => {
   }, []);
 
 
-  // angelo
+  
   const postCode = async () => {
     const settings = {
       method: "POST",
@@ -96,16 +99,33 @@ export const EditorPage = () => {
     };
     try {
       const fetchResponse = await fetch(
-        `http://localhost:8080/submit_code`,
+        // `http://localhost:8080/submit_code`,
+
+        `http://35.239.156.166:80/submit_code`,
         settings
       );
       const data = await fetchResponse.json();
-      console.log(data.output)
+      // console.log(data.output);
+      // setCodigo(data.output);
+      setIsCodeCompiled(true);
+      console.log("Desde PostCode " + data.output);
+      return data.output;
+      // console.log(data.output)
       // return data;
     } catch (e) {
       return e;
     }
   };
+
+  const CompilerBtn = async () => {
+    const output = await postCode();
+    // setCodigo(output);
+    console.log("Desde compiler btn " + output);
+    // const formattedOutput = output.replace(/\n/g, "<br>");
+    setOutputcode(output);
+  };
+
+
   async function copyRoomId() {
     try {
       await navigator.clipboard.writeText(roomId);
@@ -145,7 +165,7 @@ export const EditorPage = () => {
           </div>
         </div>
 
-        <button className="btn compilerBtn" onClick={postCode}> Compilar</button>
+        <button className="btn compilerBtn"  onClick={CompilerBtn}> Compilar</button>
 
         <button className="btn copyBtn" onClick={copyRoomId}>
           Copear ROOM ID
@@ -170,7 +190,7 @@ export const EditorPage = () => {
       
 
       <div className="outputEditor">
-          <div className="outputConsole"></div>
+        {isCodeCompiled && <div className="outputConsole">{outputcode}</div>}
       </div>
       
     </div>
