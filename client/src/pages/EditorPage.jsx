@@ -10,7 +10,6 @@ import {
   useParams,
 } from "react-router-dom";
 import toast from "react-hot-toast";
-import { func } from "prop-types";
 
 export const EditorPage = () => {
   const socketRef = useRef(null);
@@ -98,10 +97,10 @@ export const EditorPage = () => {
       },
     };
     try {
+      // const url = [process.env.PORT_CODE];
+      // console.log(url);
       const fetchResponse = await fetch(
-        // `http://localhost:8080/submit_code`,
-
-        `http://35.239.156.166:80/submit_code`,
+        `http://35.239.156.166:80/submit_code`,       
         settings
       );
       const data = await fetchResponse.json();
