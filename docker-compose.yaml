@@ -1,0 +1,15 @@
+services:
+  frontend:
+    image: react-image-compilator:v1
+    ports:
+      - "8081:8081"
+
+  socket-backend:
+    image: backend-socket-image-compilator:v1
+    ports:
+      - "4000:4000"
+
+  python-compile:
+    image: angelusszv2/compiladorpython
+    ports:
+      - "8080:8080"
